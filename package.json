@@ -1,0 +1,29 @@
+{
+  "name": "node-koa2-mysql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackgaoyuan/node-koa2-mysql.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jackgaoyuan/node-koa2-mysql/issues"
+  },
+  "homepage": "https://github.com/jackgaoyuan/node-koa2-mysql#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "koa": "^2.13.1",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
