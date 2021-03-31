@@ -4,7 +4,15 @@ const catchError = async (ctx, next) => {
   try {
     await next()
   } catch (error) {
-    if (error instanceof HttpException) { //判断是否已知错误
+    const isHttpException = error instanceof HttpException
+    const isDev = global.config.environment === 'dev'
+
+    // 如果是在dev环境，并且是未知异常，则在terminal中抛出
+    if (isDev && !isHttpException) {
+      throw error
+    }
+
+    if (isHttpException) { //判断是否已知错误
       const { msg, errorCode, code } = error
       ctx.body = {
         errmsg: msg,
