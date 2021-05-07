@@ -6,7 +6,7 @@ class Auth {
     this.level = level || 1
   }
 
-  get m() {
+  get m() { // 返回验证middleware
     return async (ctx, next) => {
       // token 检测
       const userToken = basicAuth(ctx.request) // Basic Auth进行验证

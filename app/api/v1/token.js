@@ -34,7 +34,7 @@ router.post('/verify', async (ctx) => {
   const { token } = ctx.request.body || {}
   const result = Auth.verifyToken(token)
   ctx.body = {
-    result
+    is_valid: result
   }
 })
 

@@ -5,6 +5,7 @@ const { Auth } = require('../../middleware/auth')
 const { SCOPE } = require('../../lib/const')
 const { Movie, Sentence, Music } = require('../../models/classic')
 const { Flow } = require('../../models/flow')
+const { Art } = require('../../models/art')
 
 const router = new Router({ prefix: '/v1/classic' })
 
@@ -16,7 +17,13 @@ router.get('/latest', new Auth(SCOPE.USER).m, async (ctx, next) => {
       ['index', 'DESC']
     ]
   })
-  ctx.body = flow
+
+  const art = await Art.getData(flow.art_id, flow.type)
+  // 序列化：对象转换成可传输格式的过程，node中序列化是将object转换成json格式
+  // 如果想设置sequalize对象的值，不能直接用art.index = flow.index,因为sequalize
+  // 的值在art.dataValues里面，最好使用sequalize内置方法setDataValue改变值
+  art.setDataValue('index', flow.index)
+  ctx.body = art
 })
 
 module.exports = router

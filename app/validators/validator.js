@@ -15,7 +15,7 @@ class RegisterValidator extends LinValidator {
   constructor() {
     super()
     this.email = [
-      new Rule('isEmail', '不符合email规范')
+      new Rule( 'isEmail', '不符合email规范')
     ]
     // 原密码
     this.password1 = [
@@ -69,17 +69,9 @@ class TokenValidator extends LinValidator {
       new Rule('isOptional'), // 可以传，也可以不传
       new Rule('isLength', '至少6个字符', { min: 6, max: 128 })
     ]
-  }
-  validateLoginType(vals) {
-    if (!vals.body.type) {
-      throw new Error('type是必传参数')
-    }
-    if (!LoginType.isThisType(vals.body.type)) {
-      throw new Error('type参数不合法')
-    }
+    this.validateLoginType = checkType
   }
 }
-
 class NotEmptyValidator extends LinValidator { // 验证小程序的API请求，token不为空
   constructor() {
     super()
@@ -89,9 +81,26 @@ class NotEmptyValidator extends LinValidator { // 验证小程序的API请求，
   }
 }
 
+function checkType(vals) {
+  if (!vals.body.type) {
+    throw new Error('type是必传参数')
+  }
+  if (!LoginType.isThisType(vals.body.type)) {
+    throw new Error('type参数不合法')
+  }
+}
+
+class LikeValidator extends PositiveIntegerValidator {
+  constructor() {
+    super()
+    this.validateType = checkType
+  }
+}
+
 module.exports = {
   PositiveIntegerValidator,
   RegisterValidator,
   TokenValidator,
-  NotEmptyValidator
+  NotEmptyValidator,
+  LikeValidator,
 }

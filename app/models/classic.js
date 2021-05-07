@@ -1,4 +1,4 @@
-const { Sequelize , Model, DataTypes } = require('sequelize')
+const {  Model, DataTypes } = require('sequelize')
 const { sequelize } = require('../core/db')
 
 /**
@@ -12,21 +12,21 @@ const { sequelize } = require('../core/db')
 const classicFields = {
   image: DataTypes.STRING,
   content: DataTypes.STRING,
-  pubDate: DataTypes.DATEONLY,
+  pubdate: DataTypes.DATEONLY,
   fav_nums: DataTypes.INTEGER,
   title: DataTypes.STRING,
   type: DataTypes.TINYINT,
 }
 
-class Movie extends Model {}
+class Movie extends Model {} // type = 100
 
 Movie.init(classicFields, { sequelize, tableName: 'movie' })
 
-class Sentence extends Model {}
+class Sentence extends Model {} // type = 300
 
 Sentence.init(classicFields, { sequelize, tableName: 'sentence' })
 
-class Music extends Model {}
+class Music extends Model {} // type = 200
 
 Music.init({...classicFields, ...{ url: DataTypes.STRING }}, { sequelize , tableName: 'music' })
 
