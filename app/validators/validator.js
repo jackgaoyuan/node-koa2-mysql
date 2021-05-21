@@ -1,7 +1,7 @@
 const { LinValidator, Rule } = require('../core/lin-validator-v2')
 const { User } = require('./../models/user')
 const { ParameterException } = require('../core/http-exception')
-const { LoginType } = require('../lib/const')
+const { LoginType, ArtType } = require('../lib/const')
 class PositiveIntegerValidator extends LinValidator {
   constructor() {
     super()
@@ -69,7 +69,8 @@ class TokenValidator extends LinValidator {
       new Rule('isOptional'), // 可以传，也可以不传
       new Rule('isLength', '至少6个字符', { min: 6, max: 128 })
     ]
-    this.validateLoginType = checkType
+    const checker = new Checker(LoginType)
+    this.validateLoginType = checker.check.bind(checker)
   }
 }
 class NotEmptyValidator extends LinValidator { // 验证小程序的API请求，token不为空
@@ -82,20 +83,48 @@ class NotEmptyValidator extends LinValidator { // 验证小程序的API请求，
 }
 
 function checkType(vals) {
-  if (!vals.body.type) {
+  // 从body或者path取type参数
+  let type = vals.body.type || vals.path.type
+  if (!type) {
     throw new Error('type是必传参数')
   }
-  if (!LoginType.isThisType(vals.body.type)) {
+  // 将type从string转型成int通过校验，但是v.get(patg.type)依然是string
+  type = parseInt(type)
+  if (!LoginType.isThisType(type)) {
     throw new Error('type参数不合法')
   }
 }
 
+class Checker { // 根据传入的type，构造不同的check校验器
+  constructor(type) {
+    this.enumType = type
+  }
+
+  check(vals) {
+    // 从body或者path取type参数
+    let type = vals.body.type || vals.path.type
+    if (!type) {
+      throw new Error('type是必传参数')
+    }
+    // 将type从string转型成int通过校验，但是v.get(patg.type)依然是string
+    type = parseInt(type)
+    if (!this.enumType.isThisType(type)) {
+      throw new Error('type参数不合法')
+    }
+  }
+}
+
+// 验证id是否为整数，type是否合法
 class LikeValidator extends PositiveIntegerValidator {
   constructor() {
     super()
-    this.validateType = checkType
+    const checker = new Checker(ArtType)
+    this.validateType = checker.check.bind(checker)
   }
 }
+
+// ClassicValidator和LikeValidator一摸一样，只是名字不一样
+class ClassicValidator extends LikeValidator {}
 
 module.exports = {
   PositiveIntegerValidator,
@@ -103,4 +132,5 @@ module.exports = {
   TokenValidator,
   NotEmptyValidator,
   LikeValidator,
+  ClassicValidator,
 }

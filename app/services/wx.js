@@ -15,7 +15,7 @@ class WXManager { // 微信小程序登陆管理
       global.config.wx.appId,
       global.config.wx.appSecret,
       code)
-    // 调用微信api验证code，并返回验证结果
+    // 调用微信api验证code，并返回openid
     const result = await axios.get(url)
     if (result.status !== 200) {
       throw new global.errs.AuthFailed('openid获取失败')

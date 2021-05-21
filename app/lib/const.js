@@ -15,6 +15,14 @@ const LoginType = {
   isThisType
 }
 
+const ArtType = {
+  MOVIE: 100,
+  MUSIC: 200,
+  SENTENCE: 300,
+  BOOK: 400,
+  isThisType,
+}
+
 const SCOPE = {
   USER: 8,
   ADMIN: 16,
@@ -22,5 +30,6 @@ const SCOPE = {
 
 module.exports = {
   LoginType,
+  ArtType,
   SCOPE
 }

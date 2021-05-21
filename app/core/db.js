@@ -17,6 +17,16 @@ const sequelize = new Sequelize(dbName, user, password, {
     timestamps: true, // Table内是否自动生成createAt, updateAt,
     paranoid: true, // 增加deletaAt字段，实现软删除,
     underscored: true, // column名都使用下划线
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
+    scopes: { //在sequlize instant上定义全局scope，也可以在model上定义scope
+      bh: {
+        attributes: {
+          exclude: ['updated_at', 'deleted_at', 'created_at']
+        }
+      }
+    }
   }
 })
 

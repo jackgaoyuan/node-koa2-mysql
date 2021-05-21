@@ -1,5 +1,5 @@
 const { sequelize } = require('../core/db')
-const { Sequelize, Model, DataTypes } = require('sequelize')
+const { Sequelize, Model, DataTypes, Op } = require('sequelize')
 const { Art } = require('./art')
 
 // Favor 模型包含用户的点赞信息，表示用户点赞了哪些article
@@ -53,6 +53,29 @@ class Favor extends Model {
       // art模型的increment方法
       await art.decrement('fav_nums', { by: 1, transaction: t })
     })
+  }
+
+  static async userLikeIt(art_id, type, uid) {
+    const favor = await Favor.findOne({
+      where: { art_id, type, uid }
+    })
+    return favor ? true : false
+  }
+
+  static async getMyClassicFavors(uid) {
+    const arts = await Favor.findAll({
+      where: {
+        uid,
+        type: {
+          // MySQL内置操作符，type ！== 400
+          // 不查询Book，book不是期刊
+          [Op.not]: 400
+        }
+      }
+    })
+    if (!arts) {
+      throw new global.errs.NotFound()
+    }
   }
 } 
 

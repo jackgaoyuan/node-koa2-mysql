@@ -1,8 +1,8 @@
 const { Movie, Sentence, Music } = require("./classic")
 
 class Art {
-  static async getData(art_id, type) { // 根据Flow表中的arty_id, type查询详细信息
-
+  // 获取特定期刊信息，一个期刊由type和id两个属性确定
+  static async getData(art_id, type) {
     let art = null
     const finder = {
       where: {
@@ -11,13 +11,13 @@ class Art {
     }
     switch (type) {
       case 100: // Movie表中查询
-        art = await Movie.findOne(finder)
+        art = await Movie.scope('bh').findOne(finder) // 使用全局的bh scope
         break
       case 200: // 从Music表中查询
-        art = await Music.findOne(finder)
+        art = await Music.scope('bh').findOne(finder)
         break
       case 300: // 从Sentence表中查询
-        art = await Sentence.findOne(finder)
+        art = await Sentence.scope('bh').findOne(finder)
         break
       case 400: // 从Book表中查询
         break
