@@ -63,7 +63,7 @@ class Favor extends Model {
   }
 
   static async getMyClassicFavors(uid) {
-    const arts = await Favor.findAll({
+    const artsInfoList = await Favor.findAll({
       where: {
         uid,
         type: {
@@ -73,9 +73,11 @@ class Favor extends Model {
         }
       }
     })
-    if (!arts) {
+    if (!artsInfoList) {
       throw new global.errs.NotFound()
     }
+    const favorArtList = await Art.getFavorList(artsInfoList)
+    return favorArtList
   }
 } 
 
